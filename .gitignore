@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Environments
+venv/
+.venv/
+env/
+
+# Large / generated artifacts (comment out models/ if you want them versioned)
+*.h5
+*.keras
+*.joblib
+*.pkl
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints
+
+# NLTK downloaded data (regenerated via nltk.download in notebooks)
+nltk_data/

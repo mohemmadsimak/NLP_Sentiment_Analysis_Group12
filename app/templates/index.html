@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sentiment Analysis of Customer Reviews — Group 12</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Sentiment Analysis of Customer Reviews</h1>
+    <p class="subtitle">CCS3356 NLP Group Assignment — Group 12 "Logic Legends"</p>
+
+    <textarea id="reviewInput" rows="6" placeholder="Paste a customer review here, e.g. &quot;The product quality is excellent and delivery was very fast.&quot;"></textarea>
+
+    <button id="analyzeBtn">Analyze Sentiment</button>
+
+    <div id="resultBox" class="result-box hidden">
+      <h2 id="sentimentLabel"></h2>
+      <div id="confidenceBars"></div>
+    </div>
+
+    <div id="errorBox" class="error-box hidden"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('analyzeBtn');
+    const input = document.getElementById('reviewInput');
+    const resultBox = document.getElementById('resultBox');
+    const errorBox = document.getElementById('errorBox');
+    const sentimentLabel = document.getElementById('sentimentLabel');
+    const confidenceBars = document.getElementById('confidenceBars');
+
+    const colors = { Positive: '#2ecc71', Neutral: '#95a5a6', Negative: '#e74c3c' };
+
+    btn.addEventListener('click', async () => {
+      const text = input.value.trim();
+      resultBox.classList.add('hidden');
+      errorBox.classList.add('hidden');
+
+      if (!text) {
+        errorBox.textContent = 'Please enter a review before submitting.';
+        errorBox.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Analyzing...';
+
+      try {
+        const res = await fetch('/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ review_text: text })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          errorBox.textContent = data.error || 'Something went wrong.';
+          errorBox.classList.remove('hidden');
+        } else {
+          sentimentLabel.textContent = 'Predicted Sentiment: ' + data.sentiment;
+          sentimentLabel.style.color = colors[data.sentiment] || '#333';
+
+          confidenceBars.innerHTML = '';
+          Object.entries(data.confidence).forEach(([label, pct]) => {
+            const row = document.createElement('div');
+            row.className = 'bar-row';
+            row.innerHTML = `
+              <span class="bar-label">${label}</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:${pct}%; background:${colors[label] || '#3498db'}"></div>
+              </div>
+              <span class="bar-pct">${pct}%</span>
+            `;
+            confidenceBars.appendChild(row);
+          });
+
+          resultBox.classList.remove('hidden');
+        }
+      } catch (err) {
+        errorBox.textContent = 'Could not reach the server. Is app.py running?';
+        errorBox.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Analyze Sentiment';
+      }
+    });
+  </script>
+</body>
+</html>
