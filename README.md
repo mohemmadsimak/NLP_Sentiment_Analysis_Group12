@@ -8,7 +8,7 @@
 |---|---|---|---|---|
 | 1 | CIT-24-01-0241 | B Premnath | Random Forest | LSTM |
 | 2 | CIT-24-01-0010 | M S M Simak | SVM | GRU |
-| 3 | CIT-24-01-0298 | A S M Aasim | Naive Bayes | SimpleRNN |
+| 3 | CIT-24-01-0298 | A S M Aasim | Naive_Bayes | SimpleRNN |
 
 ## Problem Statement
 Automatically classify the sentiment (**Positive / Neutral / Negative**) of customer
