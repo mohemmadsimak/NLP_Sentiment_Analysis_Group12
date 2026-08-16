@@ -137,7 +137,7 @@ print(y_train.value_counts())
 tfidf = TfidfVectorizer(max_features=8000, ngram_range=(1,2))
 X_train_tfidf = tfidf.fit_transform(X_train)
 X_test_tfidf = tfidf.transform(X_test)
-print('TF-IDF matrix shape:', X_train_tfidf.shape)
+print('TF-IDF & matrix shape:', X_train_tfidf.shape)
 
 
 # ## 7. ML Model – Random Forest Classifier
