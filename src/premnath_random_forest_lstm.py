@@ -64,7 +64,7 @@ tf.random.set_seed(RANDOM_STATE)
 
 # ## 1. Data Collection
 
-df = load_dataset('../data/1429_1.csv')
+df = load_dataset()
 print('Shape:', df.shape)
 print(df.head())
 
@@ -147,8 +147,12 @@ print('TF-IDF & matrix shape:', X_train_tfidf.shape)
 # in the validation submission.
 
 rf = RandomForestClassifier(
-    n_estimators=200, max_depth=40, class_weight='balanced',
-    random_state=RANDOM_STATE, n_jobs=-1
+    n_estimators=300,
+    max_depth=40,
+    min_samples_leaf=2,
+    class_weight='balanced',
+    random_state=RANDOM_STATE,
+    n_jobs=-1
 )
 t0 = time.time()
 rf.fit(X_train_tfidf, y_train)
